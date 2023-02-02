@@ -1,3 +1,6 @@
+WHITE = "white"
+BLACK = "black"
+
 class ChessPieces:
     def __init__(self, name, x, y, color, board):
         self.name = name
@@ -25,6 +28,8 @@ class Pawn(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -50,6 +55,8 @@ class Bishop(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -70,6 +77,8 @@ class Knight(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -97,6 +106,8 @@ class Rook(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -117,6 +128,8 @@ class Queen(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -137,6 +150,8 @@ class King(ChessPieces):
         self.possibleMove = []
 
     def update_position(self, x, y):
+        self.board.grid[self.x][self.y] = None
+        self.board.grid[x][y] = self
         self.x = x
         self.y = y
         self.possibleMove.clear()
@@ -204,6 +219,3 @@ class ChessBoard:
             for j in range(8):
                 if self.grid[i][j] is not None:
                     self.grid[i][j].update_position(i, j)
-
-
-chess = ChessBoard()
