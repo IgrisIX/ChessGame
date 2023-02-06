@@ -96,9 +96,9 @@ class ChessWidget(QWidget):
                 cell_button = QPushButton()
 
                 if (i + j) % 2 == 1:
-                    cell_button.setStyleSheet("background-color:#ffd692; border: none;")
+                    cell_button.setStyleSheet("background-color:#000000; border: none;")
                 else:
-                    cell_button.setStyleSheet("background-color:#CE9C4C; border: none;")
+                    cell_button.setStyleSheet("background-color:#F06292; border: none;")
                 cell_button.clicked.connect(self.button_clicked)
                 cell_button.setFixedSize(QSize(70, 70))
                 cell_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -106,6 +106,9 @@ class ChessWidget(QWidget):
         
     def button_clicked(self):
         print("something happened")
+
+    def render_board(self):
+
 
 
 

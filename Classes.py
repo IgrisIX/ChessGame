@@ -167,7 +167,6 @@ class King(ChessPieces):
 
 class ChessBoard:
     def __init__(self):
-        self.name = "something"
         self.size = 8
         self.grid = [
             [None, None, None, None, None, None, None, None],
@@ -179,7 +178,7 @@ class ChessBoard:
             [None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None]
         ]
-        self.whiteTeam = [King("whiteKing", 4, 0, "white", self),
+        whiteTeam = [King("whiteKing", 4, 0, "white", self),
                           Queen("whiteQueen", 3, 0, "white", self),
                           Rook("whiteRook1", 0, 0, "white", self),
                           Rook("whiteRook2", 7, 0, "white", self),
@@ -195,7 +194,7 @@ class ChessBoard:
                           Pawn("whitePawn6", 5, 1, "white", self),
                           Pawn("whitePawn7", 6, 1, "white", self),
                           Pawn("whitePawn8", 7, 1, "white", self)]
-        self.blackTeam = [King("blackKing", 4, 7, "black", self),
+        blackTeam = [King("blackKing", 4, 7, "black", self),
                           Queen("blackQueen", 3, 7, "black", self),
                           Rook("blackRook1", 0, 7, "black", self),
                           Rook("blackRook2", 7, 7, "black", self),
@@ -211,9 +210,9 @@ class ChessBoard:
                           Pawn("blackPawn1", 5, 6, "black", self),
                           Pawn("blackPawn1", 6, 6, "black", self),
                           Pawn("blackPawn1", 7, 6, "black", self)]
-        for pieces in self.whiteTeam:
+        for pieces in whiteTeam:
             self.grid[pieces.x][pieces.y] = pieces
-        for pieces in self.blackTeam:
+        for pieces in blackTeam:
             self.grid[pieces.x][pieces.y] = pieces
         for i in range(8):
             for j in range(8):
