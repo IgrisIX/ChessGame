@@ -6,19 +6,21 @@ class Game:
         self.choose = False
         self.chosenPiece = None
         self.chessBoard = ChessBoard()
+        self.gameOver = False
 
-    def choose(self, x, y):
+    def choose_move(self, x, y):
         if self.choose is False:
             if self.chessBoard.grid[x][y] is not None and self.chessBoard.grid[x][y].color == self.turn:
                 self.choose = True
                 self.chosenPiece = self.chessBoard.grid[x][y]
-            else: 
-                pass
         elif self.choose is True:
             if [x, y] in self.chosenPiece.possibleMove:
-                self.chessBoard.chosenPiece.update_position(x, y)
+                if isinstance(self.chessBoard.grid[x][y], King):
+                    self.gameOver = True
+                self.chessBoard.grid[self.chosenPiece.x][self.chosenPiece.y].update_position(x, y)
                 self.choose = False
                 self.chosenPiece = None
+                self.chessBoard.update_all_possible_move()
                 if self.turn == WHITE: 
                     self.turn = BLACK
                 else:
