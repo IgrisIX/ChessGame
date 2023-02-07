@@ -27,29 +27,30 @@ class ChessPieces:
         self.board.grid[x][y] = self
         self.x = x
         self.y = y
+        if isinstance(self, Pawn):
+            self.start = False
 
 
 class Pawn(ChessPieces):
     def __init__(self, name, x, y, color, board, icon):
         super().__init__(name, x, y, color, board, icon)
+        self.start = True
         self.possibleMove = []
     
     def update_possible_move(self):
         self.possibleMove.clear()
-        if self.color == "white" and self.y < 7:
-            self.possibleMove.append([self.x, self.y + 1])
-            if self.x > 0 and self.board.grid[self.x - 1][self.y + 1] is not None:
-                self.possibleMove.append([self.x - 1, self.y + 1])
-            if self.x < 7 and self.board.grid[self.x + 1][self.y + 1] is not None:
-                self.possibleMove.append([self.x + 1, self.y + 1])
-        elif self.color == "black" and self.y > 0:
-            self.possibleMove.append([self.x, self.y - 1])
-            if self.x > 0 and self.board.grid[self.x - 1][self.y - 1] is not None:
-                self.possibleMove.append([self.x - 1, self.y - 1])
-            if self.x < 7 and self.board.grid[self.x + 1][self.y - 1] is not None:
-                self.possibleMove.append([self.x + 1, self.y - 1])
+        if self.color == "white":
+            direction = 1
         else:
-            raise Exception("Something wrong and not considered in Pawn update_position")
+            direction = -1
+        if self.check_destination(self.x, self.y + (1 * direction)) == "empty":
+            self.possibleMove.append([self.x, self.y + (1 * direction)])
+        if self.check_destination(self.x - 1, self.y + (1 * direction)) == "enemy":
+            self.possibleMove.append([self.x - 1, self.y + (1 * direction)])
+        if self.check_destination(self.x + 1, self.y + (1 * direction)) == "enemy":
+            self.possibleMove.append([self.x + 1, self.y + (1 * direction)])
+        if self.start and self.check_destination(self.x, self.y + (2 * direction)) == "empty":
+            self.possibleMove.append([self.x, self.y + (2 * direction)])
 
 
 
@@ -64,9 +65,11 @@ class Bishop(ChessPieces):
             for i in range(1, 8):
                 targetX = self.x + (i * direction[0])
                 targetY = self.y + (i * direction[1])
-                if self.check_destination(targetX, targetY) == "empty" or \
-                        self.check_destination(targetX, targetY) == "enemy":
+                if self.check_destination(targetX, targetY) == "empty":
                     self.possibleMove.append([targetX, targetY])
+                elif self.check_destination(targetX, targetY) == "enemy":
+                    self.possibleMove.append([targetX, targetY])
+                    break
                 else:
                     break
 
@@ -84,8 +87,6 @@ class Knight(ChessPieces):
             if self.check_destination(targetX, targetY) == "empty" or \
                     self.check_destination(targetX, targetY) == "enemy":
                 self.possibleMove.append([targetX, targetY])
-            else:
-                break
 
 
 class Rook(ChessPieces):
@@ -99,9 +100,11 @@ class Rook(ChessPieces):
             for i in range(1, 8):
                 targetX = self.x + (i * direction[0])
                 targetY = self.y + (i * direction[1])
-                if self.check_destination(targetX, targetY) == "empty" or \
-                        self.check_destination(targetX, targetY) == "enemy":
+                if self.check_destination(targetX, targetY) == "empty":
                     self.possibleMove.append([targetX, targetY])
+                elif self.check_destination(targetX, targetY) == "enemy":
+                    self.possibleMove.append([targetX, targetY])
+                    break
                 else:
                     break
 
@@ -117,9 +120,11 @@ class Queen(ChessPieces):
             for i in range(1, 8):
                 targetX = self.x + (i * direction[0])
                 targetY = self.y + (i * direction[1])
-                if self.check_destination(targetX, targetY) == "empty" or \
-                        self.check_destination(targetX, targetY) == "enemy":
+                if self.check_destination(targetX, targetY) == "empty":
                     self.possibleMove.append([targetX, targetY])
+                elif self.check_destination(targetX, targetY) == "enemy":
+                    self.possibleMove.append([targetX, targetY])
+                    break
                 else:
                     break
 

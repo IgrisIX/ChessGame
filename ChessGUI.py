@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
+        self.game = Game()
         self.setWindowTitle("MainWindow")
         self.setGeometry(50, 50, 0, 0)
 
@@ -44,7 +45,7 @@ class MainWindow(QMainWindow):
 
 
         # Main body
-        central_widget = CentralWidget(self.app)
+        central_widget = CentralWidget(self.app, self.game)
         self.setCentralWidget(central_widget)
 
     def quit_app(self):
@@ -67,11 +68,10 @@ class MainWindow(QMainWindow):
 
 
 class CentralWidget(QWidget):
-    def __init__(self, app):
+    def __init__(self, app, game):
         super().__init__()
         self.app = app
-        self.game = Game()
-        
+        self.game = game
         layout_main = QHBoxLayout()
 
         self.setLayout(layout_main)
@@ -86,7 +86,9 @@ class ChessWidget(QWidget):
     def __init__(self, app, game):
         super().__init__()
         self.app = app
-
+        self.whiteStyle = "background-color:#F06292; color:#F06292; border: none; font-size: 1px"
+        self.blackStyle = "background-color:#000000; color:#000000; border: none; font-size: 1px"
+        self.chosenStle = "background-color:#f2f0ce; color:#f2efbd; border: none; font-size: 1px"
         self.chessBoard = QGridLayout()
         self.setLayout(self.chessBoard)
         self.chessBoard.setOriginCorner(Qt.BottomLeftCorner)
@@ -104,9 +106,9 @@ class ChessWidget(QWidget):
         for i in range(8):
             for j in range(8):
                 if (i + j) % 2 == 0:
-                    self.cell_array[i][j].setStyleSheet("background-color:#000000; color:#000000; border: none; font-size: 1px")
+                    self.cell_array[i][j].setStyleSheet(self.blackStyle)
                 else:
-                    self.cell_array[i][j].setStyleSheet("background-color:#F06292; color:#F06292; border: none; font-size: 1px")
+                    self.cell_array[i][j].setStyleSheet(self.whiteStyle)
                 self.cell_array[i][j].clicked.connect(self.button_clicked)
                 self.cell_array[i][j].setFixedSize(QSize(70, 70))
                 self.cell_array[i][j].setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -134,6 +136,20 @@ class ChessWidget(QWidget):
                     icon = QIcon(QPixmap("./Resources/chess_pieces/" + self.game.chessBoard.grid[i][j].icon + ".png"))
                     self.cell_array[i][j].setIcon(icon)
                     self.cell_array[i][j].setIconSize(QSize(50, 50))
+        if self.game.choose is True:
+            cell = self.game.chosenPiece
+            self.cell_array[cell.x][cell.y].setStyleSheet(self.chosenStle)
+            for location in cell.possibleMove:
+                x = location[0]
+                y = location[1]
+                self.cell_array[x][y].setStyleSheet(self.chosenStle)
+        else:
+            for i in range(8):
+                for j in range(8):
+                    if (i + j) % 2 == 0:
+                        self.cell_array[i][j].setStyleSheet(self.blackStyle)
+                    else:
+                        self.cell_array[i][j].setStyleSheet(self.whiteStyle)
 
     def game_over_message(self):
         message = QMessageBox()
@@ -149,7 +165,7 @@ class ChessWidget(QWidget):
 
         reply = message.exec()
         if reply == QMessageBox.Retry:
-            self.game = Game()
+            self.game.restart()
             self.render_board()
         else:
             self.app.quit()

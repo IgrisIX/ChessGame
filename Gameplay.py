@@ -31,3 +31,10 @@ class Game:
 
         else: 
             raise Exception("something not considered in choose")
+
+    def restart(self):
+        self.turn = WHITE
+        self.choose = False
+        self.chosenPiece = None
+        self.chessBoard = ChessBoard()
+        self.gameOver = False
